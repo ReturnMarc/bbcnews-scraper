@@ -4,7 +4,7 @@ import json
 
 # BBC home page 
 root_url = 'https://www.bbc.com'
-response = requests.get(root_url + "/news")
+response = requests.get(root_url + "/news/world")
 doc = BeautifulSoup(response.text, 'html.parser')
 
 def find_bbc_article(url):
@@ -31,9 +31,11 @@ def find_bbc_article(url):
     
     return description,img_url,time
 
+# All articles list
+news_list = []
+
 def bbc_scraper():
-    
-    news_list = []
+     
     # Find all news or articles
     newsAll = doc.find_all('div', { 'class': 'gs-c-promo' })
     
@@ -59,13 +61,22 @@ def bbc_scraper():
                     "urlToImage": img_url,
                     "publishedAt": time
                 }
-            
+
             # Add the article to our list
             news_list.append(article)
         except:
             print("Url error")
 
-    with open('bbcNews.json', 'w', encoding='utf-8') as file:
+
+catagories = ["","/world","/asia","/uk","/business","/technology"]#,"/science_and_environment","/entertainment_and_arts","/health"]
+for catagory in catagories:
+    response = requests.get(root_url + "/news"+catagory)
+    doc = BeautifulSoup(response.text, 'html.parser')
+    bbc_scraper()
+
+print("Total news:",len(news_list))
+
+with open('bbcNews.json', 'w', encoding='utf-8') as file:
         json.dump(news_list , file, ensure_ascii=False, indent=4)
 
-bbc_scraper()
+
