@@ -34,8 +34,10 @@ def find_bbc_article(url):
 # All articles list
 news_list = []
 
-def bbc_scraper():
-     
+def bbc_scraper(catagory):
+
+    
+
     # Find all news or articles
     newsAll = doc.find_all('div', { 'class': 'gs-c-promo' })
     
@@ -50,29 +52,38 @@ def bbc_scraper():
             description,img_url,time = find_bbc_article(article_url)
     
             article = {
-                  "source": {
-                    "id": article_path['href'],
-                    "name": "BBC"
-                    },
-                    "author": "Null",
-                    "title": headline.text,
-                    "description": description,
-                    "url": article_url,
-                    "urlToImage": img_url,
-                    "publishedAt": time
-                }
+                "id": article_path['href'],
+                "source": "BBC",
+                "type": catagory,
+                "author": "Null",
+                "title": headline.text,
+                "description": description,
+                "url": article_url,
+                "image_url": img_url,
+                "published_at": time,
+                "updated_at": time
+            }
 
             # Add the article to our list
             news_list.append(article)
         except:
             print("Url error")
 
+catagories = ["world","asia","uk","business","technology"]#,"science_and_environment","entertainment_and_arts","health"]
+politics_catagories = ["world","asia","uk"]
 
-catagories = ["","/world","/asia","/uk","/business","/technology"]#,"/science_and_environment","/entertainment_and_arts","/health"]
 for catagory in catagories:
-    response = requests.get(root_url + "/news"+catagory)
+    response = requests.get(root_url + "/news/"+catagory)
     doc = BeautifulSoup(response.text, 'html.parser')
-    bbc_scraper()
+    
+    # "world","asia","uk" all are politics catagory
+    world = 'world'
+    asia = 'asia'
+    uk = 'uk'
+    if catagory in politics_catagories:
+        catagory='politics'
+
+    bbc_scraper(catagory)
 
 print("Total news:",len(news_list))
 
