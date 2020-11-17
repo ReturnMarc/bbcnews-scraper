@@ -1,5 +1,5 @@
 # News Scraper
-This is BBC news scraper. It can scrape all categories news with custom format.
+It's BBC news scraper. It can scrape all categories of bbc news with customizable format.
 
 # Requirement
 * Python 3
