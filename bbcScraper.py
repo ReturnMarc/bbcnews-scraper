@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 import json
 
 # BBC home page 
-root_url = 'https://www.bbc.com'
-response = requests.get(root_url + "/news/world")
+root_url = 'https://www.bbc.com/news'
+response = requests.get(root_url)
 doc = BeautifulSoup(response.text, 'html.parser')
 
 def find_bbc_article(url):
